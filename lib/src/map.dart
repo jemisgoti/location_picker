@@ -93,10 +93,10 @@ class MapPickerState extends State<MapPicker> {
   // this also checks for location permission.
   Future<void> _initCurrentLocation() async {
     Position? currentPosition;
-    try { 
+    try {
+      Position currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: widget.desiredAccuracy!);
 
-Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy:  widget.desiredAccuracy!);
- 
       d("position = $currentPosition");
 
       setState(() => _currentPosition = currentPosition);
@@ -227,7 +227,7 @@ Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: 
                 children: <Widget>[
                   Flexible(
                     flex: 20,
-                    child: FutureLoadingBuilder<Map<String, String?>>(
+                    child: FutureLoadingBuilder<Map<String, String?>?>(
                       future: getAddress(locationProvider.lastIdleLocation),
                       mutable: true,
                       loadingIndicator: Row(
@@ -237,7 +237,7 @@ Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: 
                         ],
                       ),
                       builder: (context, data) {
-                        _address = data["address"];
+                        _address = data!["address"];
                         _placeId = data["placeId"];
                         return Text(
                           _address ??
@@ -278,7 +278,8 @@ Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: 
           '&key=${widget.apiKey}&language=${widget.language}';
 
       final response = jsonDecode((await http.get(Uri.parse(endpoint),
-              headers: await (LocationUtils.getAppHeaders() as FutureOr<Map<String, String>?>)))
+              headers: await (LocationUtils.getAppHeaders()
+                  as FutureOr<Map<String, String>?>)))
           .body);
 
       return {
@@ -396,7 +397,7 @@ Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: 
                     ?.allow_access_to_the_location_services_from_settings ??
                 'Allow access to the location services for this App using the device settings.'),
             actions: <Widget>[
-              ElevatedButton( 
+              ElevatedButton(
                 child: Text(S.of(context)?.ok ?? 'Ok'),
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).pop();
@@ -413,8 +414,8 @@ Position currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: 
 
   // TODO: 9/12/2020 this is no longer needed, remove in the next release
   Future _checkGps() async {
-  var serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
+    var serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
       if (Theme.of(context).platform == TargetPlatform.android) {
         showDialog(
           context: context,
