@@ -279,7 +279,7 @@ class MapPickerState extends State<MapPicker> {
 
       final response = jsonDecode((await http.get(Uri.parse(endpoint),
               headers: await (LocationUtils.getAppHeaders()
-                  as FutureOr<Map<String, String>?>)))
+                  as Future<Map<String, String>?>)))
           .body);
 
       return {

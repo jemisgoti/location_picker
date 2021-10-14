@@ -334,7 +334,7 @@ class LocationPickerState extends State<LocationPicker> {
 
     final response = await http.get(Uri.parse(endpoint),
         headers: await (LocationUtils.getAppHeaders()
-            as FutureOr<Map<String, String>?>));
+            as Future<Map<String, String>?>));
 
     if (response.statusCode == 200) {
       Map<String, dynamic> responseJson = jsonDecode(response.body);
