@@ -1,6 +1,7 @@
 library location_picker;
 
-export 'src/location_picker.dart';
-export 'src/model/location_result.dart';
-export 'src/utils/location_utils.dart';
-export 'package:geolocator/geolocator.dart';
+/// A Calculator.
+class Calculator {
+  /// Returns [value] plus 1.
+  int addOne(int value) => value + 1;
+}
